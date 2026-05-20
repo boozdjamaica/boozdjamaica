@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booz'd Jamaica — Boozy Poke Cakes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:     #0a0806;
+      --deep:      #110e0b;
+      --card:      #1a1410;
+      --border:    #2e2318;
+      --gold:      #c9922a;
+      --gold-lt:   #e8b84b;
+      --gold-dim:  #7a5618;
+      --red:       #8b1a1a;
+      --cream:     #f0e6d3;
+      --muted:     #7a6a55;
+      --text:      #e8dcc8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: linear-gradient(to bottom, rgba(10,8,6,0.97), transparent);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold-lt); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,26,26,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 30% 70%, rgba(201,146,42,0.08) 0%, transparent 60%);
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 14vw, 11rem);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      animation: fadeUp 1s 0.15s ease both;
+    }
+
+    .hero-title em { font-style: italic; color: var(--gold); display: block; }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--muted);
+      margin-top: 2rem;
+      max-width: 520px;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 1s 0.45s ease both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid;
+      transition: all 0.3s;
+      cursor: pointer;
+      background: none;
+    }
+
+    .btn-primary { background: var(--gold); border-color: var(--gold); color: var(--black); font-weight: 500; }
+    .btn-primary:hover { background: var(--gold-lt); border-color: var(--gold-lt); }
+    .btn-ghost { border-color: var(--border); color: var(--muted); }
+    .btn-ghost:hover { border-color: var(--gold-dim); color: var(--cream); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeUp 1s 0.7s ease both;
+    }
+
+    .hero-scroll span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* TIERS BANNER */
+    #tiers {
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      overflow: hidden;
+    }
+
+    .tiers-track { display: flex; gap: 4rem; white-space: nowrap; flex-wrap: wrap; justify-content: center; }
+    .tier-item { display: flex; align-items: center; gap: 1.2rem; flex-shrink: 0; }
+    .tier-num { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--gold-dim); letter-spacing: 0.15em; }
+    .tier-name { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; color: var(--cream); }
+    .tier-abv { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--red); letter-spacing: 0.1em; border: 1px solid var(--red); padding: 0.15rem 0.5rem; }
+    .tier-dot { width: 3px; height: 3px; background: var(--gold-dim); border-radius: 50%; }
+
+    /* SECTIONS */
+    section { padding: 7rem 3rem; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* MENU */
+    #menu { max-width: 1100px; margin: 0 auto; }
+
+    .menu-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      margin-bottom: 5rem;
+    }
+
+    .menu-intro { color: var(--muted); font-style: italic; font-size: 1.1rem; max-width: 400px; }
+
+    .menu-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      line-height: 1.8;
+      border-left: 1px solid var(--border);
+      padding-left: 1.5rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      width: 100%;
+    }
+
+    .cake-card {
+      background: var(--card);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: background 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cake-card:hover { background: #1f1810; }
+
+    .cake-number { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--gold-dim); letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+    .cake-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: 0.75rem; }
+    .cake-base { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--red); margin-bottom: 1.25rem; }
+
+    .cake-desc {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cake-allergen {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--red);
+      display: inline-block;
+    }
+
+    .cake-prices { display: flex; flex-direction: column; gap: 0.6rem; margin-top: auto; }
+    .price-row { display: flex; justify-content: space-between; align-items: center; }
+    .price-tier { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); }
+    .price-amt { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); }
+
+    .cake-order-btn {
+      display: block;
+      width: 100%;
+      margin-top: 1.75rem;
+      padding: 0.7rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .cake-order-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ABOUT */
+    #about { background: var(--deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-box { border: 1px solid var(--border); padding: 3rem; background: var(--card); position: relative; }
+
+    .about-box::before {
+      content: '';
+      position: absolute;
+      top: -8px; left: -8px; right: 8px; bottom: 8px;
+      border: 1px solid var(--gold-dim);
+      pointer-events: none;
+    }
+
+    .about-stat { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+    .about-stat:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .stat-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-top: 0.25rem; }
+
+    .about-text p { color: var(--muted); font-size: 1.05rem; margin-bottom: 1.25rem; line-height: 1.85; }
+    .about-text p strong { color: var(--cream); font-weight: 400; }
+    .about-text p em { color: var(--gold); font-style: italic; }
+
+    /* HOW IT WORKS */
+    #how { max-width: 1100px; margin: 0 auto; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    .step { background: var(--card); padding: 2.5rem 1.75rem; }
+    .step-num { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: var(--border); line-height: 1; margin-bottom: 1.25rem; }
+    .step-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); margin-bottom: 0.75rem; }
+    .step-desc { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; line-height: 1.8; }
+    .step-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+
+    /* POLICY BANNER */
+    .policy-banner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    .policy-card { background: var(--card); padding: 2rem 1.75rem; border-left: 3px solid var(--gold-dim); }
+    .policy-title { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .policy-text { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.05em; line-height: 1.9; }
+
+    /* ORDER / CONTACT */
+    .tally-section { max-width: 860px; margin: 0 auto; }
+    .tally-header { margin-bottom: 2.5rem; }
+    .tally-wrap { border: 1px solid var(--border); background: var(--card); overflow: hidden; }
+
+    #contact { background: var(--deep); border-top: 1px solid var(--border); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 900; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; }
+    .footer-copy { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; }
+    .footer-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.9rem; color: var(--muted); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .menu-header { grid-template-columns: 1fr; gap: 2rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .policy-banner { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">Booz'd Jamaica</a>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#order">Order</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">Jamaica's Boozy Poke Cake Co.</p>
+    <h1 class="hero-title">
+      Booz'd
+      <em>Jamaica.</em>
+    </h1>
+    <p class="hero-sub">Baked fresh. Soaked deep. Properly Booz'd.</p>
+    <div class="hero-cta">
+      <a href="#order" class="btn btn-primary">Place an Order</a>
+      <a href="#menu" class="btn btn-ghost">See the Menu</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- TIERS BANNER -->
+  <div id="tiers">
+    <div class="tiers-track">
+      <div class="tier-item">
+        <span class="tier-num">TIER 01</span>
+        <span class="tier-name">Nice</span>
+        <span class="tier-abv">Light ABV</span>
+      </div>
+      <div class="tier-dot"></div>
+      <div class="tier-item">
+        <span class="tier-num">TIER 02</span>
+        <span class="tier-name">Stagga</span>
+        <span class="tier-abv">Medium ABV</span>
+      </div>
+      <div class="tier-dot"></div>
+      <div class="tier-item">
+        <span class="tier-num">TIER 03</span>
+        <span class="tier-name">Booz'd</span>
+        <span class="tier-abv">Heavy ABV</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <section>
+    <div id="menu">
+      <div class="menu-header">
+        <div>
+          <p class="section-label">The Menu</p>
+          <h2 class="section-title">Pick your cake.<br /><em>Pick your tier.</em></h2>
+          <p class="menu-intro">Every cake is available at any tier. You choose how deep you go — we handle the rest. Need the same cake at different tiers? Place a separate order for each.</p>
+        </div>
+        <div class="menu-note">
+          All cakes baked fresh to order.<br />
+          Soaked with Wray &amp; Nephew Overproof.<br />
+          A 9&Prime; round cake.<br />
+          Feeds 8&ndash;10 people.<br />
+          <br />
+          &#x1F51E; Adults 18+ only.<br />
+          Orders must be placed at least 24 hours in advance.<br />
+          Next day orders must be placed by 3:00PM.<br />
+          No baking on Saturdays or Sundays.<br />
+          Payment required to confirm order.<br />
+          Lynk &middot; Bank Transfer accepted.<br />
+          <br />
+          ALLERGENS<br />
+          All cakes: Gluten &middot; Dairy &middot; Eggs &middot; Alcohol<br />
+          Banana Praline: + Peanuts<br />
+          Coco Loco: + Coconut<br />
+          We cannot guarantee the absence of cross-contamination.<br />
+          <br />
+          BULK ORDERS (5+ cakes)<br />
+          Use the contact form below.
+        </div>
+      </div>
+
+      <div class="menu-grid">
+
+        <!-- COCO LOCO -->
+        <div class="cake-card">
+          <p class="cake-number">01 / COCONUT BASE</p>
+          <h3 class="cake-name">Coco Loco</h3>
+          <p class="cake-base">Coconut Soak</p>
+          <p class="cake-desc">Bright coconut finished with a sharp, citrusy lime curd and a scatter of toasted coconut.</p>
+          <span class="cake-allergen">Contains: Coconut &middot; Gluten &middot; Dairy &middot; Eggs &middot; Alcohol</span>
+          <div class="cake-prices">
+            <div class="price-row">
+              <span class="price-tier">Nice</span>
+              <span class="price-amt">$8,450</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Stagga</span>
+              <span class="price-amt">$9,175</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Booz'd</span>
+              <span class="price-amt">$9,900</span>
+            </div>
+          </div>
+          <a href="#order" class="cake-order-btn">Order This Cake</a>
+        </div>
+
+        <!-- RUM CARAMEL -->
+        <div class="cake-card">
+          <p class="cake-number">02 / VANILLA BASE</p>
+          <h3 class="cake-name">Rum Caramel</h3>
+          <p class="cake-base">Salted Caramel Soak</p>
+          <p class="cake-desc">Warm vanilla topped with caramel whipped cream and a slow golden drizzle.</p>
+          <span class="cake-allergen">Contains: Gluten &middot; Dairy &middot; Eggs &middot; Alcohol</span>
+          <div class="cake-prices">
+            <div class="price-row">
+              <span class="price-tier">Nice</span>
+              <span class="price-amt">$8,300</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Stagga</span>
+              <span class="price-amt">$9,050</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Booz'd</span>
+              <span class="price-amt">$9,750</span>
+            </div>
+          </div>
+          <a href="#order" class="cake-order-btn">Order This Cake</a>
+        </div>
+
+        <!-- BANANA PRALINE -->
+        <div class="cake-card">
+          <p class="cake-number">03 / BANANA BASE</p>
+          <h3 class="cake-name">Banana Praline</h3>
+          <p class="cake-base">Spiced Milk Soak</p>
+          <p class="cake-desc">Ripe bananas, warm vanilla, cinnamon and nutmeg &mdash; crowned with a peanut praline cream and caramelized banana.</p>
+          <span class="cake-allergen">Contains: Peanuts &middot; Gluten &middot; Dairy &middot; Eggs &middot; Alcohol</span>
+          <div class="cake-prices">
+            <div class="price-row">
+              <span class="price-tier">Nice</span>
+              <span class="price-amt">$8,950</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Stagga</span>
+              <span class="price-amt">$9,650</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Booz'd</span>
+              <span class="price-amt">$10,400</span>
+            </div>
+          </div>
+          <a href="#order" class="cake-order-btn">Order This Cake</a>
+        </div>
+
+        <!-- BEDROOM COFFEE -->
+        <div class="cake-card">
+          <p class="cake-number">04 / CHOCOLATE BASE</p>
+          <h3 class="cake-name">Bedroom Coffee</h3>
+          <p class="cake-base">Coffee Milk Soak</p>
+          <p class="cake-desc">Rich chocolate and sweet coffee soaked deep, crowned with dulce de leche cream and a sticky toffee drizzle.</p>
+          <span class="cake-allergen">Contains: Gluten &middot; Dairy &middot; Eggs &middot; Alcohol</span>
+          <div class="cake-prices">
+            <div class="price-row">
+              <span class="price-tier">Nice</span>
+              <span class="price-amt">$10,000</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Stagga</span>
+              <span class="price-amt">$10,750</span>
+            </div>
+            <div class="price-row">
+              <span class="price-tier">Booz'd</span>
+              <span class="price-amt">$11,500</span>
+            </div>
+          </div>
+          <a href="#order" class="cake-order-btn">Order This Cake</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-visual">
+        <div class="about-box">
+          <div class="about-stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Cakes. One spirit.</div>
+          </div>
+          <div class="about-stat">
+            <div class="stat-num">63%</div>
+            <div class="stat-label">Wray &amp; Nephew Overproof</div>
+          </div>
+          <div class="about-stat">
+            <div class="stat-num">8&ndash;10</div>
+            <div class="stat-label">Serves per cake</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="section-label">About Booz'd Jamaica</p>
+        <h2 class="section-title">Made in <em>Jamaica.</em><br />Soaked in intention.</h2>
+        <p>Booz'd Jamaica started with one idea: <strong>dessert should have a little danger in it.</strong> Not in a reckless way &mdash; in a deliberate, made-with-care, you-asked-for-this way.</p>
+        <p>Every cake is made to order. <strong>No pre-baked stock. No compromise on freshness.</strong> You order, you pay, we bake. That's it.</p>
+        <p>We use <em>Wray &amp; Nephew Overproof</em> &mdash; Jamaica's most uncompromising spirit &mdash; in every single soak. You pick how deep you want to go. We handle the rest.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div id="how">
+      <p class="section-label">Process</p>
+      <h2 class="section-title">How it <em>works.</em></h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-icon">🎂</div>
+          <h3 class="step-title">Choose Your Cake</h3>
+          <p class="step-desc">Pick your cake and your tier &mdash; Nice, Stagga, or Booz'd. Need the same cake at different tiers? Place separate orders.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-icon">💳</div>
+          <h3 class="step-title">Pay to Confirm</h3>
+          <p class="step-desc">We send you payment details within 24 hours. Your order isn't confirmed until payment clears. Orders can only be cancelled before payment.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-icon">🔥</div>
+          <h3 class="step-title">We Bake Fresh</h3>
+          <p class="step-desc">Once payment is confirmed we bake, poke, soak, top and seal your cake. Made fresh every single time. No baking on Saturdays or Sundays.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-icon">📦</div>
+          <h3 class="step-title">Pickup or Delivery</h3>
+          <p class="step-desc">Collect at Duhaney Park Plaza or have it delivered. Your cake arrives sealed, fresh and ready to get the party started.</p>
+        </div>
+      </div>
+
+      <div class="policy-banner">
+        <div class="policy-card">
+          <p class="policy-title">&#x23F0; Order Timing</p>
+          <p class="policy-text">
+            Orders must be placed at least 24 hours in advance.<br />
+            Next day orders must be placed by 3:00PM.<br />
+            Orders for future dates can be placed anytime during business hours.<br />
+            No baking on Saturdays or Sundays.
+          </p>
+        </div>
+        <div class="policy-card">
+          <p class="policy-title">&#x1F6AB; Cancellations</p>
+          <p class="policy-text">
+            Orders may be cancelled before payment is made.<br />
+            Once payment is confirmed, all sales are final.
+          </p>
+        </div>
+        <div class="policy-card">
+          <p class="policy-title">&#x1F4E6; Bulk Orders</p>
+          <p class="policy-text">
+            Standard orders: up to 4 cakes.<br />
+            5 or more cakes is considered a bulk order.<br />
+            Use the contact form below to enquire.
+          </p>
+        </div>
+        <div class="policy-card">
+          <p class="policy-title">&#x23F0; Hours</p>
+          <p class="policy-text">
+            Monday &ndash; Friday: 9:30AM &ndash; 6:30PM<br />
+            Saturday: 10:30AM &ndash; 2:30PM<br />
+            Sunday: Closed
+          </p>
+        </div>
+        <div class="policy-card">
+          <p class="policy-title">&#x1F6D5; Delivery Fees</p>
+          <p class="policy-text">
+            Kingston &amp; St. Andrew: $1,000<br />
+            Portmore &amp; Spanish Town: $1,500<br />
+            Deliveries sent out at 10:00AM<br />
+            Tuesday &ndash; Friday only.
+          </p>
+        </div>
+        <div class="policy-card">
+          <p class="policy-title">&#x2728; Special Requests</p>
+          <p class="policy-text">
+            Have a special occasion or message in mind? Add it in the notes field when placing your order.<br />
+            Please note we do not offer custom cakes &mdash; all orders are from our current menu only.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER FORM -->
+  <section id="order">
+    <div class="tally-section">
+      <div class="tally-header">
+        <p class="section-label">Place Your Order</p>
+        <h2 class="section-title">Ready to get <em>Properly Booz'd?</em></h2>
+        <p style="color:var(--muted); font-style:italic; margin-top:0.5rem;">Fill out the form below. We'll send you payment details within 24 hours to confirm your order.</p>
+      </div>
+      <div class="tally-wrap" style="padding: 3rem; text-align: center;">
+        <p style="font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 2rem;">Click below to open the order form. You will be taken to a new page to complete your order.</p>
+        <a href="https://tally.so/r/yPojMd" target="_blank" class="btn btn-primary" style="display: inline-block;">Place Your Order &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="tally-section">
+      <div class="tally-header">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="section-title">Got a <em>question?</em></h2>
+        <p style="color:var(--muted); font-style:italic; margin-top:0.5rem;">Bulk orders, questions about your order, or anything else &mdash; drop us a message and we'll get back to you.</p>
+      </div>
+      <div class="tally-wrap" style="padding: 3rem; text-align: center;">
+        <p style="font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 2rem;">Click below to send us a message. We will get back to you within 24 hours.</p>
+        <a href="https://tally.so/r/dW88Ey" target="_blank" class="btn btn-ghost" style="display: inline-block;">Send a Message &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Booz'd Jamaica</div>
+    <p class="footer-tagline">Baked fresh. Soaked deep. Properly Booz'd.</p>
+    <p class="footer-copy">&copy; 2026 Booz'd Jamaica. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.style.opacity = '1';
+          el.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.cake-card, .step, .about-stat, .policy-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
