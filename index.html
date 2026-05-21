@@ -1442,11 +1442,13 @@
       const payload = {
         parent: { database_id: QUERIES_DB },
         properties: {
-          'Name':        { rich_text: [{ text: { content: name } }] },
-          'Email':       { email: email },
-          'BJ Order #':  { rich_text: [{ text: { content: ordernum || 'N/A' } }] },
-          'Message':     { rich_text: [{ text: { content: `[${subject}] ${message}` } }] },
-          'Status':      { select: { name: 'New' } }
+          'Name':         { title: [{ text: { content: name } }] },
+          'Email':        { email: email },
+          'Phone Number': { phone_number: phone },
+          'Subject':      { select: { name: subject } },
+          'BJ Order #':   { rich_text: [{ text: { content: ordernum || 'N/A' } }] },
+          'Message':      { rich_text: [{ text: { content: message } }] },
+          'Status':       { select: { name: 'New' } }
         }
       };
 
