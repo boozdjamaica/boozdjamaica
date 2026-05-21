@@ -1442,7 +1442,7 @@
       const payload = {
         parent: { database_id: QUERIES_DB },
         properties: {
-          'Name':        { rich_text: [{ text: { content: name } }] },
+          'Name':        { title: [{ text: { content: name } }] },
           'Email':       { email: email },
           'Phone Number': { phone_number: phone },
           'DD Order #':  { rich_text: [{ text: { content: ordernum || 'N/A' } }] },
