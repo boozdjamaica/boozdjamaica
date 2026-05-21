@@ -1382,7 +1382,7 @@
       const payload = {
         parent: { database_id: ORDERS_DB },
         properties: {
-          'Customer Name':    { title: [{ text: { content: name } }] },
+          'Customer Name':    { rich_text: [{ text: { content: name } }] },
           'Email':            { email: email },
           'Phone':            { phone_number: phone },
           'Requested Date':   { date: { start: date } },
@@ -1443,7 +1443,7 @@
       const payload = {
         parent: { database_id: QUERIES_DB },
         properties: {
-          'Name':        { title: [{ text: { content: name } }] },
+          'Name':        { rich_text: [{ text: { content: name } }] },
           'Email':       { email: email },
           'Phone':       { phone_number: phone },
           'DD Order #':  { rich_text: [{ text: { content: ordernum || 'N/A' } }] },
