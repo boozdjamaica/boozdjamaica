@@ -1398,10 +1398,10 @@
       };
 
       try {
-        const res = await fetch('https://crimson-paper-dabd.boozdjamaica.workers.dev', {
+        const res = await fetch('https://crimson-paper-dabd.boozdjamaica.workers.dev/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ database_id: ORDERS_DB, properties: payload.properties })
+          body: JSON.stringify({ properties: payload.properties })
         });
 
         if (res.ok) {
@@ -1453,10 +1453,10 @@
       };
 
       try {
-        const res = await fetch('https://crimson-paper-dabd.boozdjamaica.workers.dev', {
+        const res = await fetch('https://crimson-paper-dabd.boozdjamaica.workers.dev/queries', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ database_id: ORDERS_DB, properties: payload.properties })
+          body: JSON.stringify({ properties: payload.properties })
         });
 
         if (res.ok) {
